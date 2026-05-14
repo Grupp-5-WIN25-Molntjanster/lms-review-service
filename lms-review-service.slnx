@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/LMS.ReviewService.API/LMS.ReviewService.API.csproj" />
+    <Project Path="src/LMS.ReviewService.Application/LMS.ReviewService.Application.csproj" />
+    <Project Path="src/LMS.ReviewService.Domain/LMS.ReviewService.Domain.csproj" />
+    <Project Path="src/LMS.ReviewService.Infrastructure/LMS.ReviewService.Infrastructure.csproj" />
+  </Folder>
+</Solution>
