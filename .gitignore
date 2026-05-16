@@ -21,3 +21,8 @@ obj/
 # OS files
 .DS_Store
 Thumbs.db
+*.db
+
+node_modules/
+.next/
+appsettings.*.json
