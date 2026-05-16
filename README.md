@@ -13,5 +13,10 @@ Clean Architecture with ASP.NET Core Web API.
 - Entity Framework Core
 - SQL Server
 
+### Setup
+1. Clone repository
+2. Run migrations
+3. Start API
+
 ### API Documentation
 Swagger available at:
