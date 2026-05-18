@@ -61,4 +61,22 @@ public class ReviewsController : ControllerBase
         return CreatedAtAction(nameof(GetByCourse),
             new { courseId = review.CourseId }, review);
     }
+
+    // Denna endpoint används för att ta bort en recension baserat på dess ID.
+    // Den tar emot ett id som parameter, hämtar recensionen från databasen och om den finns, tar bort den.
+    // Om recensionen inte finns, returnerar den en NotFound-status.
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        var review = await _reviewRepository.GetByIdAsync(id);
+
+        if (review == null)
+        {
+            return NotFound();
+        }
+
+        await _reviewRepository.DeleteAsync(review);
+
+        return NoContent();
+    }
 }
