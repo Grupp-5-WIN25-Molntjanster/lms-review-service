@@ -36,6 +36,38 @@ public class ReviewsController : ControllerBase
         return Ok(response);
     }
 
+    [HttpGet("course/{courseId}/summary")]
+    public async Task<ActionResult<RatingSummaryResponse>> GetRatingSummary(Guid courseId)
+    {
+        var reviews = await _reviewRepository.GetByCourseIdAsync(courseId);
+
+        var reviewList = reviews.ToList();
+
+        if (!reviewList.Any())
+        {
+            return Ok(new RatingSummaryResponse());
+        }
+
+        var summary = new RatingSummaryResponse
+        {
+            AverageRating = Math.Round(reviewList.Average(r => r.Rating), 1),
+
+            TotalReviews = reviewList.Count,
+
+            FiveStar = reviewList.Count(r => r.Rating == 5),
+
+            FourStar = reviewList.Count(r => r.Rating == 4),
+
+            ThreeStar = reviewList.Count(r => r.Rating == 3),
+
+            TwoStar = reviewList.Count(r => r.Rating == 2),
+
+            OneStar = reviewList.Count(r => r.Rating == 1)
+        };
+
+        return Ok(summary);
+    }
+
     // Denna endpoint används för att skapa en ny recension.
     // Den tar emot en CreateReviewRequest som innehåller information om kursen, användaren, betyget och kommentaren.
     [HttpPost]

@@ -3,7 +3,9 @@
 public class RatingSummaryResponse
 {
     public double AverageRating { get; set; }
+
     public int TotalReviews { get; set; }
+
     public int FiveStar { get; set; }
 
     public int FourStar { get; set; }
