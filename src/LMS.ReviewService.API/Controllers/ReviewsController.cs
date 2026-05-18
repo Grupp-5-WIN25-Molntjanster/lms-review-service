@@ -18,6 +18,7 @@ public class ReviewsController : ControllerBase
 
     // Detta är en enkel endpoint för att hämta alla recensioner för en specifik kurs.
     [HttpGet("course/{courseId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetByCourse(Guid courseId)
     {
         var reviews = await _reviewRepository.GetByCourseIdAsync(courseId);
@@ -70,12 +71,15 @@ public class ReviewsController : ControllerBase
 
     // Denna endpoint används för att skapa en ny recension.
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<ActionResult> Create(CreateReviewRequest request)
     {
         if (request.Rating < 1 || request.Rating > 5)
-        {
-            return BadRequest("Rating must be between 1 and 5.");
-        }
+            return BadRequest(new
+            {
+                message = "Rating must be between 1 and 5."
+            });
 
         var review = new Review
         {
@@ -96,6 +100,9 @@ public class ReviewsController : ControllerBase
 
     // Denna endpoint används för att uppdatera en befintlig recension.
     [HttpPut("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Update(Guid id, UpdateReviewRequest request)
     {
         var review = await _reviewRepository.GetByIdAsync(id);
@@ -106,9 +113,10 @@ public class ReviewsController : ControllerBase
         }
 
         if (request.Rating < 1 || request.Rating > 5)
-        {
-            return BadRequest("Rating must be between 1 and 5.");
-        }
+            return BadRequest(new
+            {
+                message = "Rating must be between 1 and 5."
+            });
 
         review.Rating = request.Rating;
         review.Comment = request.Comment;
@@ -121,6 +129,8 @@ public class ReviewsController : ControllerBase
 
     // Denna endpoint används för att ta bort en recension baserat på dess ID.
     [HttpDelete("{id}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid id)
     {
         var review = await _reviewRepository.GetByIdAsync(id);
