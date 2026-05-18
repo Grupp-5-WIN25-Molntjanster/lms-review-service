@@ -62,6 +62,31 @@ public class ReviewsController : ControllerBase
             new { courseId = review.CourseId }, review);
     }
 
+    // Denna endpoint används för att uppdatera en befintlig recension.
+    // Den tar emot ett id som parameter för att identifiera recensionen som ska uppdateras, samt en UpdateReviewRequest som innehåller de nya värdena för betyget och kommentaren.
+    [HttpPut("{id}")]
+    public async Task<ActionResult> Update(Guid id, UpdateReviewRequest request)
+    {
+        var review = await _reviewRepository.GetByIdAsync(id);
+
+        if (review == null)
+        {
+            return NotFound();
+        }
+
+        if (request.Rating < 1 || request.Rating > 5)
+        {
+            return BadRequest("Rating must be between 1 and 5.");
+        }
+
+        review.Rating = request.Rating;
+        review.Comment = request.Comment;
+
+        await _reviewRepository.UpdateAsync(review);
+
+        return NoContent();
+    }
+
     // Denna endpoint används för att ta bort en recension baserat på dess ID.
     // Den tar emot ett id som parameter, hämtar recensionen från databasen och om den finns, tar bort den.
     // Om recensionen inte finns, returnerar den en NotFound-status.
