@@ -57,6 +57,7 @@ public class ReviewsController : ControllerBase
         };
 
         await _reviewRepository.AddAsync(review);
+        await _reviewRepository.SaveChangesAsync();
 
         return CreatedAtAction(nameof(GetByCourse),
             new { courseId = review.CourseId }, review);
@@ -83,6 +84,7 @@ public class ReviewsController : ControllerBase
         review.Comment = request.Comment;
 
         await _reviewRepository.UpdateAsync(review);
+        await _reviewRepository.SaveChangesAsync();
 
         return NoContent();
     }
@@ -101,6 +103,7 @@ public class ReviewsController : ControllerBase
         }
 
         await _reviewRepository.DeleteAsync(review);
+        await _reviewRepository.SaveChangesAsync();
 
         return NoContent();
     }
