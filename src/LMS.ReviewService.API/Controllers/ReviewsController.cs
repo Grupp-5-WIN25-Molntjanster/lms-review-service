@@ -35,4 +35,30 @@ public class ReviewsController : ControllerBase
 
         return Ok(response);
     }
+
+    // Denna endpoint används för att skapa en ny recension.
+    // Den tar emot en CreateReviewRequest som innehåller information om kursen, användaren, betyget och kommentaren.
+    [HttpPost]
+    public async Task<ActionResult> Create(CreateReviewRequest request)
+    {
+        if (request.Rating < 1 || request.Rating > 5)
+        {
+            return BadRequest("Rating must be between 1 and 5.");
+        }
+
+        var review = new Review
+        {
+            Id = Guid.NewGuid(),
+            CourseId = request.CourseId,
+            UserId = request.UserId,
+            Rating = request.Rating,
+            Comment = request.Comment,
+            CreatedAtUtc = DateTime.UtcNow
+        };
+
+        await _reviewRepository.AddAsync(review);
+
+        return CreatedAtAction(nameof(GetByCourse),
+            new { courseId = review.CourseId }, review);
+    }
 }
