@@ -1,6 +1,6 @@
 using LMS.ReviewService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using LMS.ReviewService.Application.Interfaces;
+using LMS.ReviewService.Domain.Interfaces;
 using LMS.ReviewService.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);

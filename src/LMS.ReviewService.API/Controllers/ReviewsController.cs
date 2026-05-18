@@ -1,6 +1,6 @@
-﻿using LMS.ReviewService.Application.Interfaces;
-using LMS.ReviewService.Application.Reviews;
+﻿using LMS.ReviewService.Application.Reviews;
 using LMS.ReviewService.Domain.Entities;
+using LMS.ReviewService.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LMS.ReviewService.API.Controllers;

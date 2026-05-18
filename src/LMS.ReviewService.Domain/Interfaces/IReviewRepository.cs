@@ -1,6 +1,6 @@
 ﻿using LMS.ReviewService.Domain.Entities;
 
-namespace LMS.ReviewService.Application.Interfaces;
+namespace LMS.ReviewService.Domain.Interfaces;
 
 public interface IReviewRepository
 {

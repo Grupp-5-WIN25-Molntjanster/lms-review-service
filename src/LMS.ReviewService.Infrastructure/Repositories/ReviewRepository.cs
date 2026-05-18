@@ -1,4 +1,4 @@
-﻿using LMS.ReviewService.Application.Interfaces;
+﻿using LMS.ReviewService.Domain.Interfaces;
 using LMS.ReviewService.Domain.Entities;
 using LMS.ReviewService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
