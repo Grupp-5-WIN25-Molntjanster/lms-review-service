@@ -10,8 +10,4 @@
     <ProjectReference Include="..\LMS.ReviewService.Domain\LMS.ReviewService.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Reviews\" />
-  </ItemGroup>
-
 </Project>
