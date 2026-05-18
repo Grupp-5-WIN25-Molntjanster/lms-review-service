@@ -17,7 +17,6 @@ public class ReviewsController : ControllerBase
     }
 
     // Detta är en enkel endpoint för att hämta alla recensioner för en specifik kurs.
-    // Den tar emot ett courseId som parameter och returnerar en lista med recensioner i form av ReviewResponse-objekt.
     [HttpGet("course/{courseId}")]
     public async Task<ActionResult<IEnumerable<ReviewResponse>>> GetByCourse(Guid courseId)
     {
@@ -36,6 +35,7 @@ public class ReviewsController : ControllerBase
         return Ok(response);
     }
 
+    // Denna endpoint används för att hämta en sammanfattning av recensionerna för en specifik kurs.
     [HttpGet("course/{courseId}/summary")]
     public async Task<ActionResult<RatingSummaryResponse>> GetRatingSummary(Guid courseId)
     {
@@ -69,7 +69,6 @@ public class ReviewsController : ControllerBase
     }
 
     // Denna endpoint används för att skapa en ny recension.
-    // Den tar emot en CreateReviewRequest som innehåller information om kursen, användaren, betyget och kommentaren.
     [HttpPost]
     public async Task<ActionResult> Create(CreateReviewRequest request)
     {
@@ -96,7 +95,6 @@ public class ReviewsController : ControllerBase
     }
 
     // Denna endpoint används för att uppdatera en befintlig recension.
-    // Den tar emot ett id som parameter för att identifiera recensionen som ska uppdateras, samt en UpdateReviewRequest som innehåller de nya värdena för betyget och kommentaren.
     [HttpPut("{id}")]
     public async Task<ActionResult> Update(Guid id, UpdateReviewRequest request)
     {
@@ -122,8 +120,6 @@ public class ReviewsController : ControllerBase
     }
 
     // Denna endpoint används för att ta bort en recension baserat på dess ID.
-    // Den tar emot ett id som parameter, hämtar recensionen från databasen och om den finns, tar bort den.
-    // Om recensionen inte finns, returnerar den en NotFound-status.
     [HttpDelete("{id}")]
     public async Task<ActionResult> Delete(Guid id)
     {
