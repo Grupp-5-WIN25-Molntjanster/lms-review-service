@@ -80,4 +80,34 @@ public class ReviewsControllerTests
         Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
     }
 
+    [Fact]
+    public async Task GetRatingSummary_ReturnsCorrectSummary()
+    {
+        var courseId = Guid.NewGuid();
+
+        await _client.PostAsJsonAsync("/api/reviews", new CreateReviewRequest
+        {
+            CourseId = courseId,
+            UserId = Guid.NewGuid(),
+            Rating = 5,
+            Comment = "Great"
+        });
+
+        await _client.PostAsJsonAsync("/api/reviews", new CreateReviewRequest
+        {
+            CourseId = courseId,
+            UserId = Guid.NewGuid(),
+            Rating = 3,
+            Comment = "Okay"
+        });
+
+        var summary = await _client.GetFromJsonAsync<RatingSummaryResponse>(
+            $"/api/reviews/course/{courseId}/summary");
+
+        Assert.NotNull(summary);
+        Assert.Equal(2, summary!.TotalReviews);
+        Assert.Equal(4.0, summary.AverageRating);
+        Assert.Equal(1, summary.FiveStar);
+        Assert.Equal(1, summary.ThreeStar);
+    }
 }
