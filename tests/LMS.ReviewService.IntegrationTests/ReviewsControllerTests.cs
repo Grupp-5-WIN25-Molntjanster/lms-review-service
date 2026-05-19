@@ -50,4 +50,34 @@ public class ReviewsControllerTests
 
         Assert.Equal("Excellent course", reviews[0].Comment);
     }
+
+    [Fact]
+    public async Task UpdateReview_ReturnsNoContent()
+    {
+        var courseId = Guid.NewGuid();
+
+        var createRequest = new CreateReviewRequest
+        {
+            CourseId = courseId,
+            UserId = Guid.NewGuid(),
+            Rating = 5,
+            Comment = "Original review"
+        };
+
+        var postResponse = await _client.PostAsJsonAsync("/api/reviews", createRequest);
+        var createdReview = await postResponse.Content.ReadFromJsonAsync<ReviewResponse>();
+
+        var updateRequest = new UpdateReviewRequest
+        {
+            Rating = 4,
+            Comment = "Updated review"
+        };
+
+        var putResponse = await _client.PutAsJsonAsync(
+            $"/api/reviews/{createdReview!.Id}",
+            updateRequest);
+
+        Assert.Equal(HttpStatusCode.NoContent, putResponse.StatusCode);
+    }
+
 }
