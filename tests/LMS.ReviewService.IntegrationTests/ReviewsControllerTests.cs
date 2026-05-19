@@ -18,7 +18,6 @@ public class ReviewsControllerTests
     [Fact]
     public async Task CreateReview_ThenGetReviews_ReturnsCreatedReview()
     {
-        // Arrange
         var courseId = Guid.NewGuid();
 
         var request = new CreateReviewRequest
@@ -29,19 +28,15 @@ public class ReviewsControllerTests
             Comment = "Excellent course"
         };
 
-        // Act - POST
         var postResponse = await _client.PostAsJsonAsync(
             "/api/reviews",
             request);
 
-        // Assert POST
         Assert.Equal(HttpStatusCode.Created, postResponse.StatusCode);
 
-        // Act - GET
         var reviews = await _client.GetFromJsonAsync<List<ReviewResponse>>(
             $"/api/reviews/course/{courseId}");
 
-        // Assert GET
         Assert.NotNull(reviews);
 
         Assert.Single(reviews!);
@@ -109,5 +104,24 @@ public class ReviewsControllerTests
         Assert.Equal(4.0, summary.AverageRating);
         Assert.Equal(1, summary.FiveStar);
         Assert.Equal(1, summary.ThreeStar);
+    }
+
+    [Fact]
+    public async Task DeleteReview_ReturnsNoContent()
+    {
+        var createRequest = new CreateReviewRequest
+        {
+            CourseId = Guid.NewGuid(),
+            UserId = Guid.NewGuid(),
+            Rating = 5,
+            Comment = "Review to delete"
+        };
+
+        var postResponse = await _client.PostAsJsonAsync("/api/reviews", createRequest);
+        var createdReview = await postResponse.Content.ReadFromJsonAsync<ReviewResponse>();
+
+        var deleteResponse = await _client.DeleteAsync($"/api/reviews/{createdReview!.Id}");
+
+        Assert.Equal(HttpStatusCode.NoContent, deleteResponse.StatusCode);
     }
 }
