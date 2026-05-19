@@ -5,4 +5,7 @@
     <Project Path="src/LMS.ReviewService.Domain/LMS.ReviewService.Domain.csproj" />
     <Project Path="src/LMS.ReviewService.Infrastructure/LMS.ReviewService.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/LMS.ReviewService.IntegrationTests/LMS.ReviewService.IntegrationTests.csproj" />
+  </Folder>
 </Solution>

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LMS.ReviewService.API.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/[reviews]")]
 public class ReviewsController : ControllerBase
 {
     private readonly IReviewRepository _reviewRepository;
