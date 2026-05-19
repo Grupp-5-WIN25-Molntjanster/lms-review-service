@@ -1,7 +1,5 @@
 # LMS Review Service
-## Owner
-Joachim Persson
-
+## Owner: Joachim Persson
 ### Purpose
 Handles course reviews and ratings.
 
@@ -44,14 +42,12 @@ Projects included:
 dotnet test (bash)
 
 ### API Endpoints
-
-| Method | | Endpoint |                            | Description |
-|--------| |--------|                              |-------------|
-| GET |    `/api/reviews/course/{courseId}`        | Get reviews by course |
-| GET |    `/api/reviews/course/{courseId}/summary`| Get rating summary |
-| POST |   `/api/reviews`                          | Create review |
-| PUT |    `/api/reviews/{id}`                     | Update review |
-| DEL |    `/api/reviews/{id}`                     | Delete review |
+#### | Method || Endpoint || Description |
+- | GET |`/api/reviews/course/{courseId}`| Get reviews by course |
+- | GET |`/api/reviews/course/{courseId}/summary`| Get rating summary |
+- | POST |`/api/reviews`| Create review |
+- | PUT |`/api/reviews/{id}`| Update review |
+- | DEL |`/api/reviews/{id}`| Delete review |
 
 ### API Documentation
 Swagger available at: http://localhost:5292/swagger
