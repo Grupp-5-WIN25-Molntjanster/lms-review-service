@@ -179,7 +179,9 @@ public class ReviewsController : ControllerBase
 
     // Denna endpoint används för att ta bort en recension baserat på dess ID.
     [HttpDelete("{id}")]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Delete(Guid id)
     {
@@ -188,6 +190,31 @@ public class ReviewsController : ControllerBase
         if (review == null)
         {
             return NotFound();
+        }
+
+        // Hämta användarens claims från JWT-token
+        var userIdClaim = User.FindFirst("sub")?.Value;
+        var role = User.FindFirst("role")?.Value;
+
+        // Kontrollera att userId finns och är giltig Guid
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new
+            {
+                message = "Invalid user token."
+            });
+        }
+
+        // Kontrollera om användaren äger reviewn
+        var isOwner = review.UserId == userId;
+
+        // Kontrollera om användaren är admin
+        var isAdmin = role == "Admin";
+
+        // Om användaren varken är ägare eller admin
+        if (!isOwner && !isAdmin)
+        {
+            return Forbid();
         }
 
         await _reviewRepository.DeleteAsync(review);
