@@ -2,6 +2,7 @@
 using LMS.ReviewService.Domain.Entities;
 using LMS.ReviewService.Domain.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace LMS.ReviewService.API.Controllers;
 
@@ -71,8 +72,10 @@ public class ReviewsController : ControllerBase
 
     // Denna endpoint används för att skapa en ny recension.
     [HttpPost]
+    [Authorize]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status401Unauthorized)]
     public async Task<ActionResult> Create(CreateReviewRequest request)
     {
         if (request.Rating < 1 || request.Rating > 5)
@@ -81,11 +84,21 @@ public class ReviewsController : ControllerBase
                 message = "Rating must be between 1 and 5."
             });
 
+        var userIdClaim = User.FindFirst("sub")?.Value;
+
+        if (!Guid.TryParse(userIdClaim, out var userId))
+        {
+            return Unauthorized(new
+            {
+                message = "Invalid or missing user id claim."
+            });
+        }
+
         var review = new Review
         {
             Id = Guid.NewGuid(),
             CourseId = request.CourseId,
-            UserId = request.UserId,
+            UserId = userId,
             Rating = request.Rating,
             Comment = request.Comment,
             CreatedAtUtc = DateTime.UtcNow
