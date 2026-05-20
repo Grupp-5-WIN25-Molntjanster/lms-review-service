@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using LMS.ReviewService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using LMS.ReviewService.Domain.Interfaces;
@@ -15,6 +18,38 @@ builder.Services.AddDbContext<ReviewDbContext>(options =>
         builder.Configuration.GetConnectionString("ReviewDatabase")));
 
 builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
+
+var jwtSecret = builder.Configuration["Jwt:Secret"]!;
+var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
+var jwtAudience = builder.Configuration["Jwt:Audience"]!;
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuer = true,
+        ValidIssuer = jwtIssuer,
+
+        ValidateAudience = true,
+        ValidAudience = jwtAudience,
+
+        ValidateLifetime = true,
+
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(jwtSecret)),
+
+        NameClaimType = "name",
+        RoleClaimType = "role"
+    };
+});
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
